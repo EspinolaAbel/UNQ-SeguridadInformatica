@@ -1,0 +1,27 @@
+<html lang="es-ES">
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>PÁGINA DE ADMIN</h1>
+    <div id="usuarios">
+        <h2>Usuarios registrados:</h2>
+        <pre class="container"></pre>
+    </div>
+    <div id="sesiones">
+        <h2>Sesiones creadas:</h2>
+        <pre class="container"></pre>
+    </div>
+    <script>
+        const usuarios = document.querySelector("#usuarios .container")
+        fetch("users")
+            .then(response => response.json())
+            .then(data => usuarios.append(JSON.stringify(data, null, ' ')))
+
+        const sesiones = document.querySelector("#sesiones .container")
+        fetch("users/sessions")
+            .then(response => response.json())
+            .then(data => sesiones.append(JSON.stringify(data, null, ' ')))
+    </script>
+</body>
+</html>
