@@ -6,6 +6,7 @@ import ar.edu.unq.seguridadinformatica.entity.UserSession;
 import ar.edu.unq.seguridadinformatica.repository.UserRepository;
 import ar.edu.unq.seguridadinformatica.repository.UserSessionRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class UserService {
     }
 
     @PostConstruct
+    @Transactional
     /** Esto es para inicializar un usuario administrador en el arranque de la aplicación */
     public void createAdmin() {
         var admin = userRepo.findByUsernameAndHashedPassword("admin", passwordHashing("admin"));
@@ -34,10 +36,12 @@ public class UserService {
         }
     }
 
+    @Transactional
     public RegisteredUser registerUser(String username, String password) {
         return registerUser(username, password, UserAuthorizationEnum.NORMAL);
     }
 
+    @Transactional
     public RegisteredUser registerUser(String username, String password, UserAuthorizationEnum... authorizations) {
         if (userRepo.existsByUsername(username))
             throw UserException.usernameAlreadyExists(username);
@@ -52,29 +56,35 @@ public class UserService {
         return hashedPassword;
     }
 
+    @Transactional
     public UserSession loginUser(String username, String password) {
         var hashedPassword = passwordHashing(password);
         var user = getUserOrThrowException(username, hashedPassword);
         return sessionRepo.save(new UserSession(user));
     }
 
+    @Transactional
     public User getUserOrThrowException(String username, String hashedPassword) {
         return userRepo.findByUsernameAndHashedPassword(username, hashedPassword)
             .orElseThrow(() -> UserException.userNotFound(username));
     }
 
+    @Transactional
     public List<User> getAll() {
         return userRepo.findAll();
     }
 
+    @Transactional
     public List<UserSession> getSessions() {
         return sessionRepo.findAll();
     }
 
+    @Transactional
     public void logoutUser(String sessionId) {
         sessionRepo.deleteBySessionId(sessionId);
     }
 
+    @Transactional
     public boolean hasAnyAuthorization(String sessionId, UserAuthorizationEnum... autorizations) {
         var session = sessionRepo.findBySessionId(sessionId)
             .orElseThrow(() -> SessionException.sessionDoesNotExists(sessionId));
