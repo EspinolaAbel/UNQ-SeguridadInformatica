@@ -5,9 +5,13 @@
     <link href="/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-    <h1>Página principal</h1>
-    <a href="login">Login</a>
-    <a href="registrar">Registrar usuario</a>
+<body style="padding: 2rem; max-width: 1000px; margin: auto;">
+    <div style="display: flex; flex-direction:column; gap: 2rem; justify-content: center;">
+        <h1 style="margin-bottom: 2rem; text-align: center">Página principal</h1>
+        <div style="margin: auto; text-align: center; display: flex; flex-direction:column; gap: 1rem; justify-content: center;">
+            <a class="btn btn-primary" href="login" style="width: 250px">Login</a>
+            <a class="btn btn-secondary" href="registrar" style="width: 250px">Registrar usuario</a>
+        </div>
+    </div>
 </body>
 </html>

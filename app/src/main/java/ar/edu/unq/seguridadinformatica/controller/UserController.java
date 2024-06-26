@@ -3,17 +3,21 @@ package ar.edu.unq.seguridadinformatica.controller;
 import ar.edu.unq.seguridadinformatica.entity.User;
 import ar.edu.unq.seguridadinformatica.entity.UserSession;
 import ar.edu.unq.seguridadinformatica.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.URI;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
 
 @RestController @RequestMapping("users")
 @Slf4j
@@ -56,9 +60,10 @@ public class UserController {
     }
 
     @GetMapping("logout")
-    public ResponseEntity<Void> logoutUser(@CookieValue(SESSION_ID) String sessionId) {
+    public ResponseEntity<Void> logoutUser(@CookieValue(SESSION_ID) String sessionId, HttpServletRequest request, HttpServletResponse response) {
         log.info("logoutUser - request to logout user with session={}", sessionId);
         userService.logoutUser(sessionId);
+        destroySessionIdCookieFrom(request, response);
         log.info("logoutUser - user with session={} was successfully logged out", sessionId);
         return ResponseEntity.status(HttpStatus.FOUND)
             .header(HttpHeaders.LOCATION, "/")
@@ -81,4 +86,19 @@ public class UserController {
         return allSessions;
     }
 
+    private void destroySessionIdCookieFrom(HttpServletRequest request, HttpServletResponse response) {
+        Optional
+          .ofNullable(request.getCookies())
+          .ifPresent(cookies -> {
+              for (Cookie cookie : cookies) {
+                  if (SESSION_ID.equals(cookie.getName())) {
+                      cookie.setValue(StringUtils.EMPTY);
+                      cookie.setPath("/");
+                      cookie.setMaxAge(0);
+                      response.addCookie(cookie);
+                      break;
+                  }
+              }
+          });
+    }
 }

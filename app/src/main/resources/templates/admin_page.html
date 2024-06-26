@@ -4,15 +4,46 @@
     <link href="/bootstrap-5.3.3-dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-    <h1>PÁGINA DE ADMIN</h1>
-    <div id="usuarios">
-        <h2>Usuarios registrados:</h2>
-        <pre class="container"></pre>
-    </div>
-    <div id="sesiones">
-        <h2>Sesiones creadas:</h2>
-        <pre class="container"></pre>
+<body style="padding: 2rem; max-width: 1000px; margin: auto;">
+    <div style="display: flex; flex-direction: column; gap: 2rem">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="admin">Administrador</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/main">Main</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="users/logout">Logout</a>
+            </li>
+        </ul>
+
+        <h3>Página de Administradores</h3>
+        <div class="card">
+            <div class="card-header">
+                Usuarios registrados
+            </div>
+            <div class="card-body">
+                <div id="usuarios">
+                    <pre class="container"></pre>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header">
+                    Sesiones creadas
+                </div>
+                <div class="card-body">
+                    <div id="sesiones">
+                        <pre class="container"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
         const usuarios = document.querySelector("#usuarios .container")
