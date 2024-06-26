@@ -51,7 +51,7 @@ public class Pages {
     private String getPageIfUserHasAuthorization(String requestedPage, String sessionId, UserAuthorizationEnum... authorizations) {
         return userService.hasAnyAuthorization(sessionId, authorizations)
             ? requestedPage
-            : "error_page";
+            : "user_unauthorized_page";
     }
 
 }
